@@ -1,0 +1,17 @@
+---
+
+postgres:
+    version: 9.3
+
+datasource:
+    dbname: booktown
+    dbuser: booktown
+    dbpassword: booktownpass
+
+dropbox_backup:
+    days_to_keep: 30
+    directory: /home/backup
+    uploader_script_folder: /opt/dropbox_uploader
+    configuration_folder: /opt/dropbox_uploader/config
+    enable_restore: true
+    backup_filename: vagrant-ubuntu-trusty-64-03-12-2015.tar.gz

@@ -1,0 +1,19 @@
+---
+# file: /roles/postgres/tasks/postgres_install.yml
+
+- name: ensure PostgreSQL are installed
+  apt: name={{item}}
+  with_items:
+      - postgresql-{{postgres.version}}
+      - postgresql-contrib-{{postgres.version}}
+      - python-psycopg2
+
+- name: ensure client's encoding is UTF-8
+  lineinfile:
+      dest: /etc/postgresql/{{postgres.version}}/main/postgresql.conf
+      backup: yes
+      insertafter: "#client_encoding = sql_ascii"
+      line: "client_encoding = utf8"
+
+- name: ensure PostgreSQL is running
+  service: name=postgresql state=restarted enabled=yes

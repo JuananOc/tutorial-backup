@@ -1,0 +1,31 @@
+---
+
+# file: roles/dropbox_backup/tasks/restore_backup.yml
+
+- name: Get backup from dropbox
+  command: "{{dropbox_backup.uploader_script_folder}}/dropbox_uploader.sh -f {{dropbox_backup.configuration_folder}}/.dropbox_uploader download {{dropbox_backup.backup_filename}} /tmp"
+  tags:
+    - restore
+
+- name: Change backup permission
+  file: path=/tmp/{{dropbox_backup.backup_filename}} mode=666
+  tags:
+    - restore
+
+- name: Decompress backup file
+  command: tar -xzvf /tmp/{{dropbox_backup.backup_filename}} chdir=/tmp
+  tags:
+    - restore
+
+- name: Restore database
+  shell: sudo -u postgres psql {{datasource.dbname}} < /tmp/home/backup/{{datasource.dbname}}.sql
+  tags:
+    - restore
+
+- name: Delete backups files
+  file: path={{item}} state=absent
+  with_items:
+    - /tmp/home
+    - "/tmp/{{dropbox_backup.backup_filename}}"
+  tags:
+    - restore

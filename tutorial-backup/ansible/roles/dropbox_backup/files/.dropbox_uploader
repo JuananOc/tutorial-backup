@@ -1,0 +1,5 @@
+APPKEY={{app_key}}
+APPSECRET={{app_secret}}
+ACCESS_LEVEL=sandbox
+OAUTH_ACCESS_TOKEN={{access_token}}
+OAUTH_ACCESS_TOKEN_SECRET={{access_token_secret}}

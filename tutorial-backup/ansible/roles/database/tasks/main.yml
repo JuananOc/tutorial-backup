@@ -1,0 +1,31 @@
+---
+# file: /roles/database/tasks/main.yml
+
+- name: ensure database is created
+  postgresql_db:
+    name: "{{datasource.dbname}}"
+    encoding: UTF-8
+    lc_collate: es_ES.UTF-8
+    lc_ctype: es_ES.UTF-8
+  tags: database
+
+- name: ensure user has access to database
+  postgresql_user:
+    db: "{{datasource.dbname}}"
+    name: "{{datasource.dbuser}}"
+    password: "{{datasource.dbpassword}}"
+    priv: ALL
+  tags: database
+
+- name: Copy database default script
+  copy: src="booktown.sql" dest=/tmp mode=644
+  tags: database
+
+- name: Add sample data to database
+  shell: psql {{datasource.dbname}} < /tmp/booktown.sql
+  when: dropbox_backup.enable_restore == false
+  tags: database
+
+- name: Delete database default script
+  file: path=/tmp/booktown.sql state=absent
+  tags: database

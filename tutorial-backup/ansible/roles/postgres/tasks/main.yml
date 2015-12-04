@@ -1,0 +1,6 @@
+---
+
+# file: roles/postgres/tasks/main.yml
+
+- include: common_os_setup.yml
+- include: postgres_install.yml

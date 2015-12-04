@@ -1,0 +1,7 @@
+---
+
+# file: roles/dropbox_backup/tasks/main.yml
+
+- include: backup_setup.yml
+- include: restore_backup.yml
+  when: dropbox_backup.enable_restore
